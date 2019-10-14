@@ -10,6 +10,8 @@ namespace RemoteTool_2
     // installed Cassia by Matthew Ferreira in Nuget packages. 
     class Program
     {
+        private static ITerminalServicesManager manager = new TerminalServicesManager();
+
         static void Main(string[] args)
         {
             string computerId;
@@ -32,10 +34,12 @@ namespace RemoteTool_2
 
         static void LogUserOut(string computerId)
         {
-            ITerminalServicesManager manager = new TerminalServicesManager();
+            
             using (ITerminalServer server = manager.GetRemoteServer(computerId))
             {
-                server.Open(); foreach (ITerminalServicesSession session in server.GetSessions())
+                server.Open();
+                server.Shutdown(ShutdownType.Reboot);
+                foreach (ITerminalServicesSession session in server.GetSessions())
                 {
                     // Example snipit 
                     //Console.WriteLine("Hi there, " + session.UserAccount + " on session " + session.SessionId);
@@ -59,6 +63,15 @@ namespace RemoteTool_2
                     }
                 }
             }
+
+            
         }
+        static void RebootServer(string computerId)
+        {
+            using (ITerminalServer server = manager.GetRemoteServer(computerId))
+            {
+                server.Open();
+                server.Shutdown(ShutdownType.Reboot);
+            }
     }
 }
