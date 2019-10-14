@@ -38,8 +38,10 @@ namespace RemoteTool_2
             
             using (ITerminalServer server = manager.GetRemoteServer(computerId))
             {
+                if (!server.IsOpen) // check to see if RPC is enabled. 
+                    return;
+
                 server.Open();
-                server.Shutdown(ShutdownType.Reboot);
                 foreach (ITerminalServicesSession session in server.GetSessions())
                 {
                     // Example snipit 
