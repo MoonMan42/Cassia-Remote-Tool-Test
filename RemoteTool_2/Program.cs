@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace RemoteTool_2
 {
     // installed Cassia by Matthew Ferreira in Nuget packages. 
+    //https://github.com/danports/cassia/blob/master/Samples/SessionInfo/Source/SessionInfo/Program.cs
     class Program
     {
         private static ITerminalServicesManager manager = new TerminalServicesManager();
@@ -20,13 +21,13 @@ namespace RemoteTool_2
                 Console.Write("Enter the computer Id: ");
                 computerId = Console.ReadLine();
 
-                if (computerId != "0")
-                {
-                    LogUserOut(computerId);
-                }else if (computerId == "0")
+                if (computerId == "0")
                 {
                     break;
                 }
+
+                LogUserOut(computerId);
+               
 
             } while (true);
         }
@@ -47,7 +48,7 @@ namespace RemoteTool_2
 
                     if (server.IsOpen) // check if server is up
                     {
-                        if (session.UserAccount != null) // skip any automated accounts 
+                        if (session.UserAccount != null) // skip any windows accounts 
                         {
                             try // try to disconnect sessions 
                             {
@@ -60,6 +61,9 @@ namespace RemoteTool_2
                                 Console.WriteLine("General failure.");
                             }
                         }
+                    } else
+                    {
+                        Console.WriteLine("Could not ping server.");
                     }
                 }
             }
@@ -73,5 +77,6 @@ namespace RemoteTool_2
                 server.Open();
                 server.Shutdown(ShutdownType.Reboot);
             }
+        }
     }
 }
