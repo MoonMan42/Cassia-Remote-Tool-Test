@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace RemoteTool_2
 {
+    // installed Cassia by Matthew Ferreira in Nuget packages. 
     class Program
     {
         static void Main(string[] args)
@@ -36,20 +37,24 @@ namespace RemoteTool_2
             {
                 server.Open(); foreach (ITerminalServicesSession session in server.GetSessions())
                 {
-                    Console.WriteLine("Hi there, " + session.UserAccount + " on session " + session.SessionId);
-                    Console.WriteLine("It looks like you logged on at " + session.LoginTime + " and are now " + session.ConnectionState);
+                    // Example snipit 
+                    //Console.WriteLine("Hi there, " + session.UserAccount + " on session " + session.SessionId);
+                    //Console.WriteLine("It looks like you logged on at " + session.LoginTime + " and are now " + session.ConnectionState);
 
-                    if (session.UserAccount != null)
+                    if (server.IsOpen) // check if server is up
                     {
-                        try
+                        if (session.UserAccount != null) // skip any automated accounts 
                         {
+                            try // try to disconnect sessions 
+                            {
 
-                            session.Disconnect();
-                            Console.WriteLine("Logged the user out.");
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("General failure.");
+                                session.Disconnect();
+                                Console.WriteLine("Logged the user out.");
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("General failure.");
+                            }
                         }
                     }
                 }
